@@ -7,16 +7,17 @@ import { ScreenTransition } from '../ui/ScreenTransition';
 import { WaitingScreen } from './WaitingScreen';
 
 const PROVINCES = [
-  "Bangkok", "Chiang Mai", "Phuket", "Chonburi", "Khon Kaen", 
-  "Nakhon Ratchasima", "Songkhla", "Udon Thani", "Nonthaburi", "Other"
+  "กรุงเทพมหานคร", "เชียงใหม่", "ภูเก็ต", "ชลบุรี", "ขอนแก่น", 
+  "นครราชสีมา", "สงขลา", "อุดรธานี", "นนทบุรี", "อื่นๆ"
 ];
 
 const REWARDS = [
-  "Arduino kit",
-  "Robot",
-  "PCB starter kit",
-  "Mystery box",
-  "Gaming gear"
+  "ESP32 Starter Kit",
+  "โควต้าปริ้น 3D ฟรี",
+  "ชุดอุปกรณ์บัดกรี",
+  "PCB Prototype Kit",
+  "Mystery Electronics Box",
+  "ของที่ระลึก Workshop"
 ];
 
 interface AddressStageProps {
@@ -47,16 +48,16 @@ export function AddressStage({ onSubmit, isCompleted, completedCount, totalCount
     <ScreenTransition id="address-stage">
       <Card className="max-w-md w-full mx-auto border-none shadow-none bg-transparent">
         <CardHeader className="text-center mb-2">
-          <CardTitle className="text-3xl font-bold tracking-tight">Reward Details</CardTitle>
+          <CardTitle className="text-3xl font-bold tracking-tight text-primary">ข้อมูลสำหรับจัดส่งรางวัล</CardTitle>
           <CardDescription className="text-base mt-2">
-            If we were to send rewards, where should it go?
+            เพื่อความสะดวกในการจัดส่งรางวัล กรุณาระบุข้อมูลของท่าน
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-3">
               <label className="block text-sm font-medium text-foreground text-left">
-                Which province are you from?
+                ท่านพักอาศัยอยู่ในจังหวัดใด?
               </label>
               <select
                 className="w-full h-14 px-4 text-lg rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
@@ -65,7 +66,7 @@ export function AddressStage({ onSubmit, isCompleted, completedCount, totalCount
                 required
                 disabled={loading}
               >
-                <option value="" disabled>Select province...</option>
+                <option value="" disabled>เลือกจังหวัด...</option>
                 {PROVINCES.map(p => (
                   <option key={p} value={p}>{p}</option>
                 ))}
@@ -74,7 +75,7 @@ export function AddressStage({ onSubmit, isCompleted, completedCount, totalCount
 
             <div className="space-y-3">
               <label className="block text-sm font-medium text-foreground text-left">
-                What reward do you want most?
+                ของรางวัลที่ท่านสนใจมากที่สุดคืออะไร?
               </label>
               <select
                 className="w-full h-14 px-4 text-lg rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
@@ -83,7 +84,7 @@ export function AddressStage({ onSubmit, isCompleted, completedCount, totalCount
                 required
                 disabled={loading}
               >
-                <option value="" disabled>Select reward...</option>
+                <option value="" disabled>เลือกของรางวัล...</option>
                 {REWARDS.map(r => (
                   <option key={r} value={r}>{r}</option>
                 ))}
@@ -96,7 +97,7 @@ export function AddressStage({ onSubmit, isCompleted, completedCount, totalCount
               size="lg"
               disabled={!province || !reward || loading}
             >
-              Save Details
+              {loading ? 'กำลังประมวลผลข้อมูล...' : 'บันทึกข้อมูล'}
             </Button>
           </form>
         </CardContent>
