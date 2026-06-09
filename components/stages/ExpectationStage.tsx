@@ -50,14 +50,14 @@ export function ExpectationStage({
 
   return (
     <ScreenTransition id={question}>
-      <Card className="max-w-md w-full mx-auto border-none shadow-none bg-transparent flex flex-col h-full">
+      <Card className="max-w-md w-full mx-auto border-none shadow-none bg-transparent flex flex-col my-auto">
         <CardHeader className="text-center mb-2">
           <CardTitle className="text-2xl md:text-3xl font-bold tracking-tight leading-tight text-primary">
             {question}
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex-1 flex flex-col pb-24 sm:pb-0">
-          <form onSubmit={handleSubmit} className="flex flex-col flex-1">
+        <CardContent className="flex flex-col pb-24 sm:pb-0">
+          <form onSubmit={handleSubmit} className="flex flex-col">
             
             <div className="flex flex-col gap-3 mb-6">
               {suggestions.map((suggestion, i) => {
@@ -93,7 +93,7 @@ export function ExpectationStage({
             </div>
 
             <textarea
-              className="w-full h-24 p-4 text-base rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary transition-all resize-none mb-auto"
+              className="w-full h-24 p-4 text-base rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary transition-all resize-none"
               placeholder="อื่นๆ / เพิ่มเติม (ถ้ามี)..."
               value={text}
               onChange={(e) => setText(e.target.value)}
