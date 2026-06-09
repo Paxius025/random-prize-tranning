@@ -20,6 +20,7 @@ export default function Home() {
   const [participantsCount, setParticipantsCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [countdown, setCountdown] = useState(0);
+  const [maxParticipants, setMaxParticipants] = useState(50);
   const [me, setMe] = useState<Participant | null>(null);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function Home() {
       setParticipantsCount(data.participantsCount);
       setCompletedCount(data.completedCount);
       if (data.countdown !== undefined) setCountdown(data.countdown);
+      if (data.maxParticipants !== undefined) setMaxParticipants(data.maxParticipants);
       
       // Update our local completion state from server sync to handle admin forced completion
       setMe(prev => {
@@ -105,6 +107,7 @@ export default function Home() {
               onJoin={handleJoin} 
               participantsCount={participantsCount} 
               isJoined={!!me} 
+              maxParticipants={maxParticipants}
             />
           )}
           

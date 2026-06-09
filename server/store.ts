@@ -8,9 +8,19 @@ export class RoomManager {
   
   private countdownTimer: NodeJS.Timeout | null = null;
   private countdownValue: number = 0;
+  private maxParticipantsValue: number = 50;
 
   constructor(io: Server) {
     this.io = io;
+  }
+
+  getMaxParticipants() {
+    return this.maxParticipantsValue;
+  }
+
+  setMaxParticipants(max: number) {
+    this.maxParticipantsValue = max;
+    this.broadcastState();
   }
 
   getStage() {
@@ -38,7 +48,10 @@ export class RoomManager {
     return Array.from(this.participants.values());
   }
 
-  addParticipant(id: string, nickname: string): Participant {
+  addParticipant(id: string, nickname: string): Participant | null {
+    if (this.participants.size >= this.maxParticipantsValue && !this.participants.has(id)) {
+      return null;
+    }
     const p: Participant = {
       id,
       nickname,
@@ -139,6 +152,7 @@ export class RoomManager {
       participantsCount: participantsList.length,
       completedCount,
       countdown: this.countdownValue,
+      maxParticipants: this.maxParticipantsValue,
     });
     
     // Broadcast to admin room

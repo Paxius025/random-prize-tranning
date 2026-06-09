@@ -35,7 +35,8 @@ app.prepare().then(() => {
         stage: roomManager.getStage(),
         participantsCount: roomManager.getParticipants().length,
         completedCount: roomManager.getParticipants().filter(p => p.completed && p.stage === roomManager.getStage()).length,
-        countdown: 0
+        countdown: 0,
+        maxParticipants: roomManager.getMaxParticipants()
       });
       io.to('admin').emit('adminSync', {
         stage: roomManager.getStage(),
@@ -52,6 +53,10 @@ app.prepare().then(() => {
       }
       
       const me = roomManager.addParticipant(socket.id, nickname);
+      if (!me) {
+        callback({ success: false, error: 'ห้องเต็มแล้ว (Room is full)' });
+        return;
+      }
       callback({ success: true, me });
     });
 
@@ -114,6 +119,12 @@ app.prepare().then(() => {
         case 'markComplete': {
           if (payload && payload.id) {
             roomManager.markParticipantComplete(payload.id);
+          }
+          break;
+        }
+        case 'setMaxParticipants': {
+          if (typeof payload === 'number' && payload > 0) {
+            roomManager.setMaxParticipants(payload);
           }
           break;
         }

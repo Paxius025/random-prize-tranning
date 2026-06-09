@@ -33,6 +33,7 @@ export interface ServerToClientEvents {
     participantsCount: number;
     completedCount: number;
     countdown?: number;
+    maxParticipants: number;
   }) => void;
   adminSync: (data: {
     stage: Stage;

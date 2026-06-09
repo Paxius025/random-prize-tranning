@@ -12,6 +12,8 @@ export default function AdminPage() {
   const { socket, isConnected } = useSocket(true);
   const [stage, setStage] = useState<Stage>(Stage.JOIN);
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [maxParticipants, setMaxParticipants] = useState<number>(50);
+  const [tempMax, setTempMax] = useState<string>('50');
   const [confirmState, setConfirmState] = useState<{
     isOpen: boolean;
     action: string | null;
@@ -33,6 +35,9 @@ export default function AdminPage() {
 
     socket.on('stateSync', (data) => {
       setStage(data.stage);
+      if (data.maxParticipants !== undefined) {
+        setMaxParticipants(data.maxParticipants);
+      }
     });
 
     socket.on('adminSync', (data) => {
@@ -117,13 +122,37 @@ export default function AdminPage() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">จำนวนผู้เข้าร่วมทั้งหมด</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-4xl font-bold">{totalCount} <span className="text-lg text-muted-foreground font-normal">ท่าน</span></div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">ตั้งค่าความจุห้อง</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <input 
+                  type="number" 
+                  value={tempMax}
+                  onChange={(e) => setTempMax(e.target.value)}
+                  className="w-full px-2 py-1.5 border rounded text-lg font-bold bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                  min="1"
+                />
+                <Button size="sm" onClick={() => {
+                  const num = parseInt(tempMax, 10);
+                  if (!isNaN(num) && num > 0) {
+                    socket?.emit('adminAction', 'setMaxParticipants', num);
+                  }
+                }}>บันทึก</Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">จำกัดปัจจุบัน: {maxParticipants} ท่าน</p>
             </CardContent>
           </Card>
           

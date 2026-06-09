@@ -13,9 +13,10 @@ interface JoinStageProps {
   onJoin: (nickname: string) => void;
   participantsCount: number;
   isJoined: boolean;
+  maxParticipants?: number;
 }
 
-export function JoinStage({ onJoin, participantsCount, isJoined }: JoinStageProps) {
+export function JoinStage({ onJoin, participantsCount, isJoined, maxParticipants = 50 }: JoinStageProps) {
   const [nickname, setNickname] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -45,9 +46,9 @@ export function JoinStage({ onJoin, participantsCount, isJoined }: JoinStageProp
           </div>
 
           <div className="w-full space-y-2 pb-4 border-b border-border/50">
-            <ProgressBar current={participantsCount} total={50} />
+            <ProgressBar current={participantsCount} total={maxParticipants} />
             <p className="text-sm font-medium text-muted-foreground">
-              {participantsCount} จาก 50 ท่าน เข้าร่วมแล้ว
+              {participantsCount} จาก {maxParticipants} ท่าน เข้าร่วมแล้ว
             </p>
           </div>
 
@@ -79,22 +80,34 @@ export function JoinStage({ onJoin, participantsCount, isJoined }: JoinStageProp
               <input
                 type="text"
                 placeholder="ชื่อเล่นสำหรับเข้าร่วมกิจกรรม"
-                className="w-full h-14 px-4 text-lg rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                className="w-full h-14 px-4 text-lg rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary transition-all disabled:opacity-50"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 maxLength={50}
                 required
-                disabled={loading}
+                disabled={loading || participantsCount >= maxParticipants}
               />
             </div>
-            <Button 
-              type="submit" 
-              className="w-full text-lg" 
-              size="lg"
-              disabled={!nickname.trim() || loading}
-            >
-              {loading ? 'กำลังตรวจสอบข้อมูล...' : 'เข้าร่วมกิจกรรม'}
-            </Button>
+            {participantsCount >= maxParticipants ? (
+              <Button 
+                type="button" 
+                className="w-full text-lg" 
+                size="lg"
+                disabled
+                variant="secondary"
+              >
+                ห้องเต็มแล้ว (Room is full)
+              </Button>
+            ) : (
+              <Button 
+                type="submit" 
+                className="w-full text-lg" 
+                size="lg"
+                disabled={!nickname.trim() || loading}
+              >
+                {loading ? 'กำลังตรวจสอบข้อมูล...' : 'เข้าร่วมกิจกรรม'}
+              </Button>
+            )}
           </form>
         </CardContent>
       </Card>
